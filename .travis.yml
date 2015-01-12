@@ -14,16 +14,12 @@ install:
   - sudo apt-get -qq install libexpat1-dev libyaml-dev libpam0g-dev
 
 before_script:
-  - mysql -u root -e "CREATE USER 'ejabberd_test'@'localhost' IDENTIFIED BY 'ejabberd_test';"
-  - mysql -u root -e "CREATE DATABASE ejabberd_test;"
-  - mysql -u root -e "GRANT ALL ON ejabberd_test.* TO 'ejabberd_test'@'localhost';"
-  - psql -U postgres -c "CREATE USER ejabberd_test WITH PASSWORD 'ejabberd_test';"
-  - psql -U postgres -c "CREATE DATABASE ejabberd_test;"
-  - psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ejabberd_test TO ejabberd_test;"
+  - sudo service riak status
+  - sudo riak version
 
 script:
   - ./autogen.sh
-  - ./configure --enable-all --disable-odbc
+  - ./configure --disable-all --enable-riak
   - make xref
   - ERL_LIBS=$PWD make test
   - grep -q 'TEST COMPLETE, \([[:digit:]]*\) ok, .* of \1 ' logs/raw.log
