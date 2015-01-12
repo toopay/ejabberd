@@ -19,7 +19,7 @@ before_script:
 
 script:
   - ./autogen.sh
-  - ./configure --disable-all --enable-riak
+  - ./configure --enable-all --disable-odbc --disable-pgsql --disable-mysql
   - make xref
   - ERL_LIBS=$PWD make test
   - grep -q 'TEST COMPLETE, \([[:digit:]]*\) ok, .* of \1 ' logs/raw.log
